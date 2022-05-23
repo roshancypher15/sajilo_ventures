@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import './ride_registration.dart';
+import 'package:provider/provider.dart';
+import 'package:sajilo_ventures/dashboard.dart';
+import 'package:sajilo_ventures/helper/analytics_item.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,21 +33,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        textTheme: const TextTheme(
-          headline1: TextStyle(
-              fontFamily: 'Raleway',
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider.value(value: AnalyticsHelper())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          textTheme: const TextTheme(
+            headline1: TextStyle(
+                fontFamily: 'Raleway',
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: Colors.black87),
+          ),
+          colorScheme: ColorScheme.fromSwatch(
+              primarySwatch:
+                  buildMaterialColor(const Color.fromRGBO(199, 33, 38, 1))),
         ),
-        colorScheme: ColorScheme.fromSwatch(
-            primarySwatch:
-                buildMaterialColor(const Color.fromRGBO(199, 33, 38, 1))),
+        home: const Dashboard(),
       ),
-      home: const RideRegistration(),
     );
   }
 }
