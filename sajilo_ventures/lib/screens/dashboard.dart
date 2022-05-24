@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:sajilo_ventures/helper/analytics_item.dart';
-import 'package:sajilo_ventures/widgets/dashboard_filter_dropdown.dart';
-import 'package:sajilo_ventures/widgets/graph_builder.dart';
-import 'package:sajilo_ventures/widgets/grid_item.dart';
-import 'package:sajilo_ventures/widgets/growth_loss_indicator.dart';
-import 'package:sajilo_ventures/widgets/radio_component.dart';
+import '../helper/analytics_item.dart';
+import '../widgets/dashboard_filter_dropdown.dart';
+import '../widgets/graph_builder.dart';
+import '../widgets/grid_item.dart';
+import '../widgets/growth_loss_indicator.dart';
+import '../widgets/radio_component.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);

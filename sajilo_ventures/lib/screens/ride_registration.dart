@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './widgets/vehicle_dropdown.dart';
-import './widgets/image_input.dart';
+import '../widgets/vehicle_dropdown.dart';
+import '../widgets/image_input.dart';
 
 class RideRegistration extends StatefulWidget {
   const RideRegistration({Key? key}) : super(key: key);

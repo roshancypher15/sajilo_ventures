@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sajilo_ventures/dashboard.dart';
-import 'package:sajilo_ventures/helper/analytics_item.dart';
+import 'package:sajilo_ventures/helper/all_trips_helper.dart';
+import 'package:sajilo_ventures/screens/all_trips.dart';
+import 'package:sajilo_ventures/screens/trip_summary.dart';
+import './screens/dashboard.dart';
+import './helper/analytics_item.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,23 +38,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: AnalyticsHelper())],
+      providers: [
+        ChangeNotifierProvider.value(value: AnalyticsHelper()),
+        ChangeNotifierProvider.value(value: AllTripsHelper())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          textTheme: const TextTheme(
-            headline1: TextStyle(
-                fontFamily: 'Raleway',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: Colors.black87),
-          ),
+          textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme)
+              .copyWith(
+                  headline1: GoogleFonts.openSans(
+                      textStyle: Theme.of(context).textTheme.headline1,
+                      fontSize: 21,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700),
+                  bodyText1: GoogleFonts.robotoCondensed(
+                      textStyle: Theme.of(context).textTheme.bodyText1,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15)),
           colorScheme: ColorScheme.fromSwatch(
               primarySwatch:
                   buildMaterialColor(const Color.fromRGBO(199, 33, 38, 1))),
         ),
-        home: const Dashboard(),
+        home: const AllTrips(),
+        routes: {
+          TripSummary.routeName: (ctx) => const TripSummary(),
+        },
       ),
     );
   }
