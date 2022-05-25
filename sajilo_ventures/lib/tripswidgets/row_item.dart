@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class RowItem extends StatefulWidget {
@@ -23,8 +21,9 @@ class _RowItemState extends State<RowItem> {
         ),
         Text(widget.data,
             style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
+                fontSize: 17,
+                fontFamily: 'RobotoCondensed',
+                fontWeight: FontWeight.w600,
                 color: Colors.black)),
       ],
     );

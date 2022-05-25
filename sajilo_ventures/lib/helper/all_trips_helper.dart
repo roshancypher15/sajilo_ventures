@@ -30,7 +30,8 @@ class AllTripsHelper with ChangeNotifier {
     TripItem(
         name: 'Prabal Rai',
         tripId: '#lkhfyt',
-        tripdate: DateTimeFormat.format(DateTime.now(), format: 'M j,Y,H:i A'),
+        tripdate:
+            DateTimeFormat.format(DateTime.now(), format: 'M j, Y, H:i A'),
         pickupLocation: 'New Baneshowr,Kathmandu',
         destination: 'Learning Realm International School, Kalanki',
         tripCost: 185,
@@ -42,7 +43,8 @@ class AllTripsHelper with ChangeNotifier {
     TripItem(
         name: 'Prabal Rai',
         tripId: '#putgsh',
-        tripdate: DateTimeFormat.format(DateTime.now(), format: 'M j,Y,H:i A'),
+        tripdate:
+            DateTimeFormat.format(DateTime.now(), format: 'M j, Y, H:i A'),
         pickupLocation: 'Sanga,Bhaktapur',
         destination: 'NASA Intl College,Gairigaun,Tinkune',
         tripCost: 75,
@@ -54,7 +56,8 @@ class AllTripsHelper with ChangeNotifier {
     TripItem(
         name: 'Prabal Rai',
         tripId: '#khydth',
-        tripdate: DateTimeFormat.format(DateTime.now(), format: 'M j,Y,H:i A'),
+        tripdate:
+            DateTimeFormat.format(DateTime.now(), format: 'M j, Y, H:i A'),
         pickupLocation: 'Naya Thimi,Bhaktapur',
         destination: 'Bhagwati Marg, Naxal',
         tripCost: 149,
@@ -66,7 +69,8 @@ class AllTripsHelper with ChangeNotifier {
     TripItem(
         name: 'Prabal Rai',
         tripId: '#hsyusk',
-        tripdate: DateTimeFormat.format(DateTime.now(), format: 'M j,Y,H:i A'),
+        tripdate:
+            DateTimeFormat.format(DateTime.now(), format: 'M j, Y, H:i A'),
         pickupLocation: 'Krishna Mandir,Patan',
         destination: 'Chandragiri Cable Car,Chandragiri',
         tripCost: 200,

@@ -1,5 +1,3 @@
-import 'package:charts_flutter/flutter.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sajilo_ventures/helper/all_trips_helper.dart';
@@ -70,6 +68,7 @@ class _AllTripsState extends State<AllTrips> {
                   );
                 }),
           ),
+         
         ],
       ),
     );

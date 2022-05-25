@@ -50,7 +50,8 @@ class _TripSummaryState extends State<TripSummary> {
               padding: EdgeInsets.only(top: 20),
               child: Text('Trip Details',
                   style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 17,
+                      fontFamily: 'RobotoCondensed',
                       fontWeight: FontWeight.w700,
                       color: Colors.black)),
             ),
@@ -117,6 +118,7 @@ class _TripSummaryState extends State<TripSummary> {
                         _loaded.pickupLocation,
                         style: GoogleFonts.openSans(
                             textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
                           fontSize: 14,
                         )),
@@ -125,6 +127,7 @@ class _TripSummaryState extends State<TripSummary> {
                       Text(_loaded.destination,
                           style: GoogleFonts.openSans(
                               textStyle: const TextStyle(
+                            fontWeight: FontWeight.w500,
                             letterSpacing: 0.5,
                             fontSize: 14,
                           ))),
@@ -171,7 +174,9 @@ class _TripSummaryState extends State<TripSummary> {
                   children: [
                     const Text(
                       'Total Distance',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 156, 155, 155)),
                     ),
                     const SizedBox(
                       height: 5,
@@ -188,7 +193,9 @@ class _TripSummaryState extends State<TripSummary> {
                   children: [
                     const Text(
                       'Fair',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 156, 155, 155)),
                     ),
                     const SizedBox(
                       height: 5,
@@ -205,7 +212,9 @@ class _TripSummaryState extends State<TripSummary> {
                   children: [
                     const Text(
                       'Travel Time',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 156, 155, 155)),
                     ),
                     const SizedBox(
                       height: 5,
@@ -223,91 +232,120 @@ class _TripSummaryState extends State<TripSummary> {
             const SizedBox(
               height: 20,
             ),
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color.fromARGB(255, 243, 239, 239)),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 25),
-                    child: Text('Receipt',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'RobotoCondensed',
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black)),
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        const Text(
-                          'Base Fair  ',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        Text('Rs. ${(_loaded.tripCost - 10).toString()}',
-                            style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black)),
-                      ],
+            Padding(
+              padding: const EdgeInsets.only(left: 8, top: 10),
+              child: Container(
+                height: 180,
+                width: 350,
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: Color.fromARGB(255, 243, 239, 239)),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 25, right: 10),
+                      child: Text('Receipt',
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontFamily: 'RobotoCondensed',
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black)),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const <Widget>[
-                        Text(
-                          'Surge  ',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        Text('Rs. 10',
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15, right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          const Text(
+                            'Base Fair  ',
                             style: TextStyle(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black)),
-                      ],
+                                color: Color.fromARGB(255, 156, 155, 155)),
+                          ),
+                          Text('Rs. ${(_loaded.tripCost - 10).toString()}',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black)),
+                        ],
+                      ),
                     ),
-                  ),
-                  const Text(
-                    '---------------------------------------------------',
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                        color: Color.fromARGB(255, 219, 217, 217)),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 15, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        const Text(
-                          'Total  ',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        Text('Rs. ${(_loaded.tripCost).toString()}',
-                            style: const TextStyle(
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15, right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const <Widget>[
+                          Text(
+                            'Surge  ',
+                            style: TextStyle(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black)),
-                      ],
+                                color: Color.fromARGB(255, 156, 155, 155)),
+                          ),
+                          Text('Rs. 10',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black)),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    const Text(
+                      '---------------------------------------------',
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
+                          color: Color.fromARGB(255, 219, 217, 217)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          const Text(
+                            'Total  ',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromARGB(255, 156, 155, 155)),
+                          ),
+                          Text('Rs. ${(_loaded.tripCost).toString()}',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )
+            ),
+            const SizedBox(
+              height: 80,
+            ),
+            Container(
+              width: 400,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Done',
+                  style: TextStyle(
+                      fontFamily: 'RobotoCondensed',
+                      fontSize: 20,
+                      color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+              ),
+            ),
           ]),
         ));
   }

@@ -30,6 +30,7 @@ class _TripItemState extends State<TripItemWidget> {
   Widget build(BuildContext context) {
     final _data = Provider.of<AllTripsHelper>(context);
     return InkWell(
+      splashFactory: NoSplash.splashFactory,
       onTap: (() {
         Navigator.pushNamed(context, TripSummary.routeName,
             arguments: widget.tripId);
@@ -55,14 +56,16 @@ class _TripItemState extends State<TripItemWidget> {
                     ),
                     Text(widget.tripId,
                         style: const TextStyle(
-                            fontSize: 15,
+                            fontFamily: 'RobotoCondensed',
+                            fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: Colors.black)),
                   ],
                 ),
                 Text(widget.tripdate,
                     style: const TextStyle(
-                        fontSize: 15,
+                        fontFamily: 'RobotoCondensed',
+                        fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.black)),
               ],
@@ -93,6 +96,7 @@ class _TripItemState extends State<TripItemWidget> {
                         widget.pickup,
                         style: GoogleFonts.openSans(
                             textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
                           letterSpacing: 0.5,
                           fontSize: 14,
                         )),
@@ -101,6 +105,7 @@ class _TripItemState extends State<TripItemWidget> {
                       Text(widget.destination,
                           style: GoogleFonts.openSans(
                               textStyle: const TextStyle(
+                            fontWeight: FontWeight.w500,
                             letterSpacing: 0.5,
                             fontSize: 14,
                           ))),
@@ -146,10 +151,11 @@ class _TripItemState extends State<TripItemWidget> {
                       }),
                 ),
                 const SizedBox(
-                  width: 65,
+                  width: 60,
                 ),
                 Text('Rs.${widget.rate.toString()}',
                     style: const TextStyle(
+                        fontFamily: 'RobotoCondensed',
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: Colors.black)),

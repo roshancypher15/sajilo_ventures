@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "sajilo_ventures",
+            "cwd": "sajilo_ventures",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "sajilo_ventures (profile mode)",
+            "cwd": "sajilo_ventures",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "sajilo_ventures (release mode)",
+            "cwd": "sajilo_ventures",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
