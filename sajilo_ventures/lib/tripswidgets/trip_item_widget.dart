@@ -78,8 +78,10 @@ class _TripItemState extends State<TripItemWidget> {
                       MapsIcon.pin,
                       color: Colors.pink,
                     ),
-                    SizedBox(
-                      height: 25,
+                    Icon(
+                      Icons.more_vert_outlined,
+                      size: 18,
+                      color: Colors.pink,
                     ),
                     Icon(
                       MapsIcon.location,
@@ -101,7 +103,7 @@ class _TripItemState extends State<TripItemWidget> {
                           fontSize: 14,
                         )),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Text(widget.destination,
                           style: GoogleFonts.openSans(
                               textStyle: const TextStyle(
@@ -120,12 +122,16 @@ class _TripItemState extends State<TripItemWidget> {
                 Padding(
                   padding: const EdgeInsets.only(right: 15),
                   child: CircleAvatar(
-                    radius: 30,
+                    radius: 35,
                     backgroundColor: Colors.pink,
                     child: CircleAvatar(
-                      radius: 28,
-                      backgroundImage: NetworkImage(
-                        widget.imageUrl,
+                      radius: 33,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(
+                          widget.imageUrl,
+                        ),
                       ),
                     ),
                   ),

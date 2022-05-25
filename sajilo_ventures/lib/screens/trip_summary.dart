@@ -100,8 +100,10 @@ class _TripSummaryState extends State<TripSummary> {
                       MapsIcon.pin,
                       color: Colors.pink,
                     ),
-                    SizedBox(
-                      height: 25,
+                    Icon(
+                      Icons.more_vert_outlined,
+                      size: 18,
+                      color: Colors.pink,
                     ),
                     Icon(
                       MapsIcon.location,
@@ -123,7 +125,7 @@ class _TripSummaryState extends State<TripSummary> {
                           fontSize: 14,
                         )),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Text(_loaded.destination,
                           style: GoogleFonts.openSans(
                               textStyle: const TextStyle(
