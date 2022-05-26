@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sajilo_ventures/helper/all_trips_helper.dart';
+import 'package:sajilo_ventures/marker_icons.dart';
 import 'package:sajilo_ventures/tripswidgets/row_item.dart';
 
 import '../maps_icon_icons.dart';
@@ -43,6 +44,7 @@ class _TripSummaryState extends State<TripSummary> {
           titleTextStyle: Theme.of(context).textTheme.headline1,
         ),
         body: Container(
+          height: MediaQuery.of(context).size.height,
           margin: const EdgeInsets.only(left: 10, right: 10),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -106,7 +108,7 @@ class _TripSummaryState extends State<TripSummary> {
                       color: Colors.pink,
                     ),
                     Icon(
-                      MapsIcon.location,
+                      Marker.location_2,
                       color: Colors.pink,
                     ),
                   ],
@@ -147,12 +149,16 @@ class _TripSummaryState extends State<TripSummary> {
                 Padding(
                   padding: const EdgeInsets.only(right: 15),
                   child: CircleAvatar(
-                    radius: 30,
+                    radius: 35,
                     backgroundColor: Colors.pink,
                     child: CircleAvatar(
-                      radius: 28,
-                      backgroundImage:
-                          NetworkImage(_loaded.imageUrl.toString()),
+                      radius: 33,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage:
+                            NetworkImage(_loaded.imageUrl.toString()),
+                      ),
                     ),
                   ),
                 ),

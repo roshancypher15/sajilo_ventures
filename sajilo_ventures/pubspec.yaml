@@ -99,6 +99,15 @@ flutter:
     - family: MapsIcon
       fonts:
         - asset: icons/MapsIcon.ttf
+    - family: Blooddrop
+      fonts:
+        - asset: icons/Blooddrop.ttf
+    - family:  Marker
+      fonts:
+        - asset: icons/Marker.ttf
+    - family:  Verified
+      fonts:
+        - asset: icons/Verified.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

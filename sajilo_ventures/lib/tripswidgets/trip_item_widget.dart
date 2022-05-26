@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sajilo_ventures/helper/all_trips_helper.dart';
 import 'package:sajilo_ventures/maps_icon_icons.dart';
+import 'package:sajilo_ventures/marker_icons.dart';
 import 'package:sajilo_ventures/screens/trip_summary.dart';
 
 class TripItemWidget extends StatefulWidget {
@@ -84,7 +85,7 @@ class _TripItemState extends State<TripItemWidget> {
                       color: Colors.pink,
                     ),
                     Icon(
-                      MapsIcon.location,
+                      Marker.location_2,
                       color: Colors.pink,
                     ),
                   ],
