@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sajilo_ventures/helper/all_trips_helper.dart';
-import 'package:sajilo_ventures/screens/all_trips.dart';
 import 'package:sajilo_ventures/screens/redirected_page.dart';
 import 'package:sajilo_ventures/screens/report_rider.dart';
 import 'package:sajilo_ventures/screens/trip_summary.dart';
-import './screens/dashboard.dart';
+
 import './helper/analytics_item.dart';
 
 void main() {
