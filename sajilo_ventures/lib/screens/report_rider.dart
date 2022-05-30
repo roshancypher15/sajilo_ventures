@@ -206,11 +206,11 @@ class _ReportRiderState extends State<ReportRider> {
                           Icon(
                             Icons.more_vert_outlined,
                             size: 18,
-                            color: Color.fromARGB(255, 206, 41, 96),
+                            color: Color.fromRGBO(220, 20, 60, 1),
                           ),
                           Icon(
                             Marker.location_2,
-                            color: Color.fromARGB(255, 206, 41, 96),
+                            color: Color.fromRGBO(220, 20, 60, 1),
                             size: 30,
                           ),
                         ],

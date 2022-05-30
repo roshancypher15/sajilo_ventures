@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
                       fontSize: 15)),
           colorScheme: ColorScheme.fromSwatch(
               primarySwatch:
-                  buildMaterialColor(const Color.fromRGBO(199, 33, 38, 1))),
+                  buildMaterialColor(const Color.fromRGBO(220, 20, 60, 1))),
         ),
         home: const ReportRider(),
         routes: {
