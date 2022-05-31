@@ -10,15 +10,14 @@ class LocationService {
 
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
-    print(json);
+
     var results = {
       'bounds_ne': json['routes'][0]['bounds']['northeast'],
       'bounds_sw': json['routes'][0]['bounds']['southwest'],
       'start_location': json['routes'][0]['legs'][0]['start_location'],
       'start_address': json['routes'][0]['legs'][0]['start_address'],
-     
       'end_location': json['routes'][0]['legs'][0]['end_location'],
-       'end_address': json['routes'][0]['legs'][0]['end_address'],
+      'end_address': json['routes'][0]['legs'][0]['end_address'],
       'polyline': json['routes'][0]['overview_polyline']['points'],
       'polyline_decoded': PolylinePoints()
           .decodePolyline(json['routes'][0]['overview_polyline']['points']),

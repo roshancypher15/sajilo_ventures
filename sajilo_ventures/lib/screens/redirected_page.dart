@@ -22,13 +22,27 @@ class RedirectedPage extends StatefulWidget {
 }
 
 class _RedirectedPageState extends State<RedirectedPage> {
+  final List<LatLng> _listLatLng = const [
+    LatLng(27.6747752, 85.3423544),
+    LatLng(27.6915247, 85.3398613),
+    LatLng(27.6867652, 85.3233535),
+    LatLng(27.6846742, 85.322744),
+    LatLng(27.6707552, 85.3313544),
+    LatLng(27.6772904, 85.3178902),
+    LatLng(27.6879191, 85.3496212),
+    LatLng(27.6911188, 85.3360133),
+  ];
   late BitmapDescriptor originIcon;
   late BitmapDescriptor destinationIcon;
+
+  late BitmapDescriptor bikeIcon;
+  late BitmapDescriptor carIcon;
   final CustomInfoWindowController _controller = CustomInfoWindowController();
   final CameraPosition _initialCameraPosition = const CameraPosition(
     target: LatLng(27.6947033, 85.3310636),
     zoom: 13.4746,
   );
+  int i = 0;
   final Set<Polyline> _polylines = <Polyline>{};
   final Set<Marker> _markers = <Marker>{};
   int _polyLineIdCounter = 1;
@@ -61,6 +75,12 @@ class _RedirectedPageState extends State<RedirectedPage> {
     final Uint8List markerIconDesti =
         await getBytesFromAsset('assets/joystick.png', 100);
     destinationIcon = BitmapDescriptor.fromBytes(markerIconDesti);
+    final Uint8List initialBikeIcon =
+        await getBytesFromAsset('assets/bike.png', 60);
+    bikeIcon = BitmapDescriptor.fromBytes(initialBikeIcon);
+    final Uint8List initialCarIcon =
+        await getBytesFromAsset('assets/car_side.png', 60);
+    carIcon = BitmapDescriptor.fromBytes(initialCarIcon);
   }
 
   void _setmarker(
@@ -78,7 +98,7 @@ class _RedirectedPageState extends State<RedirectedPage> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -88,6 +108,7 @@ class _RedirectedPageState extends State<RedirectedPage> {
                           Expanded(
                             child: Text(
                               address,
+                              textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.white,
                               ),
@@ -167,8 +188,8 @@ class _RedirectedPageState extends State<RedirectedPage> {
           ),
           CustomInfoWindow(
             controller: _controller,
-            height: 30,
-            width: 300,
+            height: 50,
+            width: 220,
             offset: 40,
           ),
         ],
@@ -211,11 +232,18 @@ class _RedirectedPageState extends State<RedirectedPage> {
         'destination',
         endAddress,
         destinationIcon);
+    for (i = 1; i <= _listLatLng.length; i++) {
+      if (i % 2 == 0) {
+        _setmarker(_listLatLng[i], 'bike$i', 'Bike Rider', bikeIcon);
+      } else {
+        _setmarker(_listLatLng[i], 'Car$i', 'Car Rider', carIcon);
+      }
+    }
   }
 
   Future<void> _maps() async {
-    var directions =
-        await LocationService().getDirections('koteshowr', 'baneshowr');
+    var directions = await LocationService()
+        .getDirections('Patan Durbar Square', 'Tribhwan International Airport');
     _goToPlace(
         directions['start_location']['lat'],
         directions['start_location']['lng'],
