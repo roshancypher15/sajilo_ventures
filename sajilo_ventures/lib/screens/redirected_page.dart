@@ -1,12 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sajilo_ventures/helper/location_service.dart';
 
 import 'package:sajilo_ventures/verified_icons.dart';
 import '../helper/location_service.dart';
+import 'package:custom_info_window/custom_info_window.dart';
 
 import 'dart:async';
+import 'dart:ui' as ui;
 
 class RedirectedPage extends StatefulWidget {
   static const routeName = ' redirect';
@@ -17,7 +22,9 @@ class RedirectedPage extends StatefulWidget {
 }
 
 class _RedirectedPageState extends State<RedirectedPage> {
-  final Completer<GoogleMapController> _controller = Completer();
+  late BitmapDescriptor originIcon;
+  late BitmapDescriptor destinationIcon;
+  final CustomInfoWindowController _controller = CustomInfoWindowController();
   final CameraPosition _initialCameraPosition = const CameraPosition(
     target: LatLng(27.6947033, 85.3310636),
     zoom: 13.4746,
@@ -32,19 +39,73 @@ class _RedirectedPageState extends State<RedirectedPage> {
       _submit();
       Timer(const Duration(seconds: 2), () => Navigator.of(context).pop());
     });
+    _initmarker();
+
     _maps();
 
     // TODO: implement initState
     super.initState();
   }
 
-  void _setmarker(LatLng points, String Id, double color) {
+  @override
+  void dispose() {
+    _controller.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void _initmarker() async {
+    final Uint8List markerIconOrigin =
+        await getBytesFromAsset('assets/pointer.png', 60);
+    originIcon = BitmapDescriptor.fromBytes(markerIconOrigin);
+    final Uint8List markerIconDesti =
+        await getBytesFromAsset('assets/joystick.png', 100);
+    destinationIcon = BitmapDescriptor.fromBytes(markerIconDesti);
+  }
+
+  void _setmarker(
+      LatLng points, String id, String address, BitmapDescriptor _icon) {
     setState(() {
       _markers.add(Marker(
-          markerId: MarkerId(Id),
-          infoWindow: InfoWindow(title: Id),
-          icon: BitmapDescriptor.defaultMarkerWithHue(color),
-          position: points));
+        markerId: MarkerId(id),
+        icon: _icon,
+        position: points,
+        onTap: () {
+          _controller.addInfoWindow!(
+            Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              address,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                ),
+              ],
+            ),
+            points,
+          );
+        },
+      ));
     });
   }
 
@@ -87,14 +148,30 @@ class _RedirectedPageState extends State<RedirectedPage> {
             )),
         backgroundColor: Colors.transparent,
       ),
-      body: GoogleMap(
-        initialCameraPosition: _initialCameraPosition,
-        zoomControlsEnabled: true,
-        polylines: _polylines,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        markers: _markers,
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: _initialCameraPosition,
+            zoomControlsEnabled: true,
+            onTap: (position) {
+              _controller.hideInfoWindow!();
+            },
+            onCameraMove: (position) {
+              _controller.onCameraMove!();
+            },
+            polylines: _polylines,
+            onMapCreated: (GoogleMapController controller) async {
+              _controller.googleMapController = controller;
+            },
+            markers: _markers,
+          ),
+          CustomInfoWindow(
+            controller: _controller,
+            height: 30,
+            width: 300,
+            offset: 40,
+          ),
+        ],
       ),
     );
   }
@@ -104,12 +181,14 @@ class _RedirectedPageState extends State<RedirectedPage> {
       double startLng,
       double endLat,
       double endLng,
+      String startAddress,
+      String endAddress,
       Map<String, dynamic> boundsNe,
       Map<String, dynamic> boundsSw) async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(endLat, endLng), zoom: 17)));
-    controller.animateCamera(CameraUpdate.newLatLngBounds(
+    _controller.googleMapController!.animateCamera(
+        CameraUpdate.newCameraPosition(
+            CameraPosition(target: LatLng(endLat, endLng), zoom: 17)));
+    _controller.googleMapController!.animateCamera(CameraUpdate.newLatLngBounds(
         LatLngBounds(
           northeast: LatLng(boundsNe['lat'], boundsNe['lng']),
           southwest: LatLng(boundsSw['lat'], boundsSw['lng']),
@@ -120,8 +199,9 @@ class _RedirectedPageState extends State<RedirectedPage> {
           startLat,
           startLng,
         ),
-        'oirgin',
-        BitmapDescriptor.hueBlue);
+        'origin',
+        startAddress,
+        originIcon);
 
     _setmarker(
         LatLng(
@@ -129,7 +209,8 @@ class _RedirectedPageState extends State<RedirectedPage> {
           endLng,
         ),
         'destination',
-        BitmapDescriptor.hueRed);
+        endAddress,
+        destinationIcon);
   }
 
   Future<void> _maps() async {
@@ -140,6 +221,8 @@ class _RedirectedPageState extends State<RedirectedPage> {
         directions['start_location']['lng'],
         directions['end_location']['lat'],
         directions['end_location']['lng'],
+        directions['start_address'],
+        directions['end_address'],
         directions['bounds_ne'],
         directions['bounds_sw']);
 
@@ -186,5 +269,15 @@ class _RedirectedPageState extends State<RedirectedPage> {
                     ],
                   )));
         });
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 }
