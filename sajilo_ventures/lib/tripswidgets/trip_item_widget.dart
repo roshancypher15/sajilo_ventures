@@ -85,7 +85,7 @@ class _TripItemState extends State<TripItemWidget> {
                       color: Colors.pink,
                     ),
                     Icon(
-                      Marker.location_2,
+                      Marker1.location_2,
                       color: Colors.pink,
                     ),
                   ],

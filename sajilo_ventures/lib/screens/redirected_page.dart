@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sajilo_ventures/helper/location_service.dart';
+import 'package:sajilo_ventures/screens/report_rider.dart';
 
 import 'package:sajilo_ventures/verified_icons.dart';
 import '../helper/location_service.dart';
@@ -46,16 +47,25 @@ class _RedirectedPageState extends State<RedirectedPage> {
   final Set<Polyline> _polylines = <Polyline>{};
   final Set<Marker> _markers = <Marker>{};
   int _polyLineIdCounter = 1;
+  late List<String> args;
 
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 0)).then((_) {
-      _submit();
-      Timer(const Duration(seconds: 2), () => Navigator.of(context).pop());
-    });
-    _initmarker();
+      args = ModalRoute.of(context)!.settings.arguments as List<String>;
 
-    _maps();
+      // args as bool
+      //     ? _submit().then((value) {
+      //         Timer(const Duration(seconds: 1), () {
+      //           Navigator.of(context).pop();
+      //         });
+      //       })
+      //     : null;
+    }).then((value) {
+      _initmarker();
+
+      _maps(args[0], args[1]);
+    });
 
     // TODO: implement initState
     super.initState();
@@ -174,6 +184,7 @@ class _RedirectedPageState extends State<RedirectedPage> {
           GoogleMap(
             initialCameraPosition: _initialCameraPosition,
             zoomControlsEnabled: true,
+            mapType: MapType.normal,
             onTap: (position) {
               _controller.hideInfoWindow!();
             },
@@ -188,8 +199,8 @@ class _RedirectedPageState extends State<RedirectedPage> {
           ),
           CustomInfoWindow(
             controller: _controller,
-            height: 50,
-            width: 220,
+            height: 40,
+            width: 150,
             offset: 40,
           ),
         ],
@@ -241,20 +252,21 @@ class _RedirectedPageState extends State<RedirectedPage> {
     }
   }
 
-  Future<void> _maps() async {
-    var directions = await LocationService()
-        .getDirections('Patan Durbar Square', 'Tribhwan International Airport');
+  Future<void> _maps(String startAddress, String endAddress) async {
+    var directions =
+        await LocationService().getDirections(startAddress, endAddress);
     _goToPlace(
         directions['start_location']['lat'],
         directions['start_location']['lng'],
         directions['end_location']['lat'],
         directions['end_location']['lng'],
-        directions['start_address'],
-        directions['end_address'],
+        startAddress,
+        endAddress,
         directions['bounds_ne'],
         directions['bounds_sw']);
-
-    _setPolyline(directions['polyline_decoded']);
+    setState(() {
+      _setPolyline(directions['polyline_decoded']);
+    });
   }
 
   Future<void> _submit() async {

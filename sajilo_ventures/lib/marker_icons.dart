@@ -19,8 +19,8 @@
 ///
 import 'package:flutter/widgets.dart';
 
-class Marker {
-  Marker._();
+class Marker1 {
+  Marker1._();
 
   static const _kFontFam = 'Marker';
   static const String? _kFontPkg = null;

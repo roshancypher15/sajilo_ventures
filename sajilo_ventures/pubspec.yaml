@@ -46,6 +46,7 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   flutter_svg: ^1.1.0
   custom_info_window: ^1.0.1
+  google_place: ^0.4.7
 
 dev_dependencies:
   flutter_test:

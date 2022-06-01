@@ -12,6 +12,7 @@ class ReportReason extends StatefulWidget {
 }
 
 class _ReportReasonState extends State<ReportReason> {
+  bool _reportedSuccessfully=true;
   int? _selected;
   var id = 1;
 
@@ -36,7 +37,7 @@ class _ReportReasonState extends State<ReportReason> {
       onTap: () => setState(() {
         _selected = index;
 
-        Navigator.of(context).pushNamed(RedirectedPage.routeName);
+        Navigator.of(context).pushNamed(RedirectedPage.routeName,arguments:_reportedSuccessfully );
       }),
     );
   }

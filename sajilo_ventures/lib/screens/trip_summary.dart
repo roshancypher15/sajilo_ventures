@@ -108,7 +108,7 @@ class _TripSummaryState extends State<TripSummary> {
                       color: Colors.pink,
                     ),
                     Icon(
-                      Marker.location_2,
+                      Marker1.location_2,
                       color: Colors.pink,
                     ),
                   ],

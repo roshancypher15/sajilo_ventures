@@ -209,7 +209,7 @@ class _ReportRiderState extends State<ReportRider> {
                             color: Color.fromRGBO(220, 20, 60, 1),
                           ),
                           Icon(
-                            Marker.location_2,
+                            Marker1.location_2,
                             color: Color.fromRGBO(220, 20, 60, 1),
                             size: 30,
                           ),

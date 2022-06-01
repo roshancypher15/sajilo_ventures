@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:sajilo_ventures/helper/all_trips_helper.dart';
 import 'package:sajilo_ventures/screens/redirected_page.dart';
 import 'package:sajilo_ventures/screens/report_rider.dart';
+import './screens/auto_complete.dart';
+
 import 'package:sajilo_ventures/screens/trip_summary.dart';
 
 import './helper/analytics_item.dart';
@@ -62,7 +64,7 @@ class MyApp extends StatelessWidget {
               primarySwatch:
                   buildMaterialColor(const Color.fromRGBO(220, 20, 60, 1))),
         ),
-        home: const ReportRider(),
+        home: const AutoComplete(),
         routes: {
           TripSummary.routeName: (ctx) => const TripSummary(),
           RedirectedPage.routeName: (ctx) => const RedirectedPage(),
