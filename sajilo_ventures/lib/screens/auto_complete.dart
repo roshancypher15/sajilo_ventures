@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+
 import 'package:google_place/google_place.dart';
 import 'package:sajilo_ventures/marker_icons.dart';
 import 'package:sajilo_ventures/screens/redirected_page.dart';
@@ -14,9 +13,11 @@ class AutoComplete extends StatefulWidget {
 
 class _AutoCompleteState extends State<AutoComplete> {
   final _startSearchFieldController = TextEditingController();
+
   final _endSearchFieldController = TextEditingController();
   late GooglePlace _googlePlace;
-  List<AutocompletePrediction> _predictions = [];
+
+  List<SearchResult> _predictions = [];
   DetailsResult? startPosition;
   DetailsResult? endPosition;
 
@@ -28,6 +29,7 @@ class _AutoCompleteState extends State<AutoComplete> {
     String apiKey = 'AIzaSyAZ6HwE0tRcLWAaQU8UZllVg1qmXGnDna4';
     _googlePlace = GooglePlace(apiKey);
     startFocusNode = FocusNode();
+
     endFocusNode = FocusNode();
     // TODO: implement initState
     super.initState();
@@ -41,12 +43,21 @@ class _AutoCompleteState extends State<AutoComplete> {
     endFocusNode.dispose();
   }
 
+  String _validator(String raw) {
+    String result = raw.substring(raw.indexOf(','), raw.length);
+    return result;
+  }
+
   void autoCompleteSearch(String value) async {
-    var result = await _googlePlace.autocomplete.get(value);
-    if (result != null && result.predictions != null && mounted) {
-      print(result.predictions!.last.description);
+    // var resultAddress = await _googlePlace.autocomplete.get(value);
+
+    var result = await _googlePlace.search.getNearBySearch(
+        Location(lat: 27.706631, lng: 85.318622), 10250,
+        keyword: value);
+
+    if (result != null && result.results != null && mounted) {
       setState(() {
-        _predictions = result.predictions!;
+        _predictions = result.results!;
       });
     }
   }
@@ -130,49 +141,58 @@ class _AutoCompleteState extends State<AutoComplete> {
                   }
                 },
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, index) => ListTile(
-                  leading: Icon(
-                    Marker1.location_2,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  title: Text(
-                    _predictions[index].description.toString(),
-                  ),
-                  onTap: () async {
-                    final placeId = _predictions[index].placeId;
-                    final details = await _googlePlace.details.get(placeId!);
-                    if (details != null && details.result != null && mounted) {
-                      if (startFocusNode.hasFocus) {
-                        setState(() {
-                          startPosition = details.result;
-                          _startSearchFieldController.text =
-                              details.result!.name!;
-                          FocusScope.of(context).requestFocus(endFocusNode);
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => ListTile(
+                    leading: Icon(
+                      Marker1.location_2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    title: Text(_predictions[index].name! +
+                        ',' +
+                        _validator(_predictions[index].vicinity!)),
+                    onTap: () async {
+                      final placeId = _predictions[index].placeId;
+                      final details = await _googlePlace.details.get(placeId!);
 
-                          _predictions = [];
-                        });
-                      } else {
-                        setState(() {
-                          endPosition = details.result;
-                          _endSearchFieldController.text =
-                              details.result!.name!;
-                          FocusScope.of(context).unfocus();
-                          _predictions = [];
-                        });
+                      if (details != null &&
+                          details.result != null &&
+                          mounted) {
+                        if (startFocusNode.hasFocus) {
+                          setState(() {
+                            startPosition = details.result;
+                            _startSearchFieldController.text =
+                                _predictions[index].name! +
+                                    ',' +
+                                    _predictions[index].vicinity!;
+
+                            _predictions = [];
+                            FocusScope.of(context).requestFocus(endFocusNode);
+                          });
+                        } else {
+                          setState(() {
+                            endPosition = details.result;
+                            _endSearchFieldController.text =
+                                _predictions[index].name! +
+                                    ',' +
+                                    _predictions[index].vicinity!;
+                            FocusScope.of(context).unfocus();
+                            _predictions = [];
+                          });
+                        }
+                        if (startPosition != null && endPosition != null) {
+                          Navigator.of(context)
+                              .pushNamed(RedirectedPage.routeName, arguments: [
+                            _startSearchFieldController.text,
+                            _endSearchFieldController.text
+                          ]);
+                        }
                       }
-                      if (startPosition != null && endPosition != null) {
-                        Navigator.of(context)
-                            .pushNamed(RedirectedPage.routeName, arguments: [
-                          _startSearchFieldController.text,
-                          _endSearchFieldController.text
-                        ]);
-                      }
-                    }
-                  },
+                    },
+                  ),
+                  itemCount: _predictions.length,
                 ),
-                itemCount: _predictions.length,
               ),
             ],
           ),
