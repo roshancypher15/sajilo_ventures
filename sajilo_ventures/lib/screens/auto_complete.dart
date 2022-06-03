@@ -43,16 +43,11 @@ class _AutoCompleteState extends State<AutoComplete> {
     endFocusNode.dispose();
   }
 
-  String _validator(String raw) {
-    String result = raw.substring(raw.indexOf(','), raw.length);
-    return result;
-  }
-
   void autoCompleteSearch(String value) async {
     // var resultAddress = await _googlePlace.autocomplete.get(value);
 
     var result = await _googlePlace.search.getNearBySearch(
-        Location(lat: 27.706631, lng: 85.318622), 10250,
+        Location(lat: 27.810984, lng: 85.284879), 14021,
         keyword: value);
 
     if (result != null && result.results != null && mounted) {
@@ -60,6 +55,20 @@ class _AutoCompleteState extends State<AutoComplete> {
         _predictions = result.results!;
       });
     }
+  }
+
+  String _validator(String raw) {
+    String result;
+    RegExp regExp = RegExp(r'^([A-Z0-9]+)(\+)([A-Z0-9]+)(.*)$');
+
+    final RegExpMatch? match = regExp.firstMatch(raw);
+
+    if (match?.group(1) == null) {
+      result = raw;
+    } else {
+      result = match!.group(4).toString();
+    }
+    return result;
   }
 
   @override
@@ -150,7 +159,6 @@ class _AutoCompleteState extends State<AutoComplete> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     title: Text(_predictions[index].name! +
-                        ',' +
                         _validator(_predictions[index].vicinity!)),
                     onTap: () async {
                       final placeId = _predictions[index].placeId;
