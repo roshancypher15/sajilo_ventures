@@ -48,6 +48,11 @@ dependencies:
   custom_info_window: ^1.0.1
   google_place: ^0.4.7
   google_maps_webservice: ^0.0.19
+  cloud_firestore: ^3.1.17
+  firebase_auth: ^3.3.19
+  font_awesome_flutter: ^10.1.0
+  location: ^4.4.0
+  firebase_core: ^1.17.1
 
 dev_dependencies:
   flutter_test:

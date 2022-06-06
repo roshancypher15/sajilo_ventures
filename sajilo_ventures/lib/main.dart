@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sajilo_ventures/helper/all_trips_helper.dart';
+import 'package:sajilo_ventures/screens/dashboard.dart';
 import 'package:sajilo_ventures/screens/redirected_page.dart';
 import 'package:sajilo_ventures/screens/report_rider.dart';
+import 'package:sajilo_ventures/screens/ride_registration.dart';
+import 'package:sajilo_ventures/screens/user_or_rider.dart';
 import './screens/auto_complete.dart';
 
 import 'package:sajilo_ventures/screens/trip_summary.dart';
 
 import './helper/analytics_item.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -49,14 +55,14 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme)
+          textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
               .copyWith(
-                  headline1: GoogleFonts.openSans(
+                  headline1: GoogleFonts.inter(
                       textStyle: Theme.of(context).textTheme.headline1,
                       fontSize: 21,
                       color: Colors.black,
                       fontWeight: FontWeight.w700),
-                  bodyText1: GoogleFonts.robotoCondensed(
+                  bodyText1: GoogleFonts.inter(
                       textStyle: Theme.of(context).textTheme.bodyText1,
                       fontWeight: FontWeight.w700,
                       fontSize: 15)),
@@ -64,8 +70,10 @@ class MyApp extends StatelessWidget {
               primarySwatch:
                   buildMaterialColor(const Color.fromRGBO(220, 20, 60, 1))),
         ),
-        home: const AutoComplete(),
+        home: const UserOrRider(),
         routes: {
+          RideRegistration.routeName: (ctx) => const RideRegistration(),
+          Dashboard.routeName: (ctx) => const Dashboard(),
           TripSummary.routeName: (ctx) => const TripSummary(),
           RedirectedPage.routeName: (ctx) => const RedirectedPage(),
         },

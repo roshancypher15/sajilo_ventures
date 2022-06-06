@@ -106,7 +106,7 @@ class _TripItemState extends State<TripItemWidget> {
                       ),
                       const SizedBox(height: 20),
                       Text(widget.destination,
-                          style: GoogleFonts.openSans(
+                          style: GoogleFonts.inter(
                               textStyle: const TextStyle(
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.5,

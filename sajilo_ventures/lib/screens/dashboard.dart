@@ -9,6 +9,7 @@ import '../widgets/growth_loss_indicator.dart';
 import '../widgets/radio_component.dart';
 
 class Dashboard extends StatefulWidget {
+  static const routeName = 'dashboard';
   const Dashboard({Key? key}) : super(key: key);
 
   @override

@@ -4,6 +4,7 @@ import '../widgets/vehicle_dropdown.dart';
 import '../widgets/image_input.dart';
 
 class RideRegistration extends StatefulWidget {
+  static const routeName = 'rider-registration';
   const RideRegistration({Key? key}) : super(key: key);
 
   @override
@@ -92,7 +93,9 @@ class _RideRegistrationState extends State<RideRegistration> {
         bottomOpacity: 0.0,
         elevation: 0.0,
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Colors.black,

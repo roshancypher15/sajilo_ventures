@@ -6,6 +6,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sajilo_ventures/helper/location_service.dart';
 import 'package:sajilo_ventures/screens/report_rider.dart';
+import 'package:location/location.dart';
 
 import 'package:sajilo_ventures/verified_icons.dart';
 import '../helper/location_service.dart';
@@ -35,6 +36,7 @@ class _RedirectedPageState extends State<RedirectedPage> {
   ];
   late BitmapDescriptor originIcon;
   late BitmapDescriptor destinationIcon;
+  final Location _location = Location();
 
   late BitmapDescriptor bikeIcon;
   late BitmapDescriptor carIcon;
@@ -61,7 +63,7 @@ class _RedirectedPageState extends State<RedirectedPage> {
       //         });
       //       })
       //     : null;
-    }).then((value) {
+    }).then((_) {
       _initmarker();
 
       _maps(args[0], args[1]);
@@ -163,7 +165,9 @@ class _RedirectedPageState extends State<RedirectedPage> {
         bottomOpacity: 0.0,
         elevation: 0.0,
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
             icon: RawMaterialButton(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -183,6 +187,7 @@ class _RedirectedPageState extends State<RedirectedPage> {
         children: [
           GoogleMap(
             initialCameraPosition: _initialCameraPosition,
+            myLocationEnabled: true,
             zoomControlsEnabled: true,
             mapType: MapType.normal,
             onTap: (position) {
