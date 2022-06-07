@@ -7,6 +7,7 @@ import 'package:sajilo_ventures/screens/redirected_page.dart';
 import 'package:sajilo_ventures/screens/report_rider.dart';
 import 'package:sajilo_ventures/screens/ride_registration.dart';
 import 'package:sajilo_ventures/screens/user_or_rider.dart';
+import 'package:sajilo_ventures/screens/login_signup_alert.dart';
 import './screens/auto_complete.dart';
 
 import 'package:sajilo_ventures/screens/trip_summary.dart';
@@ -76,6 +77,7 @@ class MyApp extends StatelessWidget {
           Dashboard.routeName: (ctx) => const Dashboard(),
           TripSummary.routeName: (ctx) => const TripSummary(),
           RedirectedPage.routeName: (ctx) => const RedirectedPage(),
+          LoginSignupAlert.routeName: (ctx) => const LoginSignupAlert(),
         },
       ),
     );

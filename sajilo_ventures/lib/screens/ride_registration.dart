@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/vehicle_dropdown.dart';
@@ -17,6 +18,40 @@ class _RideRegistrationState extends State<RideRegistration> {
   final _registrationNumberController = TextEditingController();
   final _drivingLicenseController = TextEditingController();
   final _numberplatefocusnode = FocusNode();
+  var _vehicleModel = '';
+  var _vehicleRegistrationNumber = '';
+  var _licenseNumber = '';
+  var _vehicleType = '';
+  late String _userId;
+  final _firestore = FirebaseFirestore.instance;
+
+  @override
+  void didChangeDependencies() {
+    _userId = ModalRoute.of(context)!.settings.arguments as String;
+    print(_userId);
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  void getVehicleTypeFromChild(newString) {
+    setState(() {
+      _vehicleType = newString;
+    });
+  }
+
+  void getData() async {
+    final isvalid = formkey.currentState!.validate();
+    if (isvalid) {
+      formkey.currentState!.save();
+
+      await _firestore.collection('allRiders').doc(_userId).set({
+        'vehicleType': _vehicleType,
+        'vehicleModel': _vehicleModel,
+        'vehicleRegistrationNumber': _vehicleRegistrationNumber,
+        'licenseNumber': _licenseNumber
+      });
+    }
+  }
 
   Future<void> _submit() async {
     showModalBottomSheet(
@@ -50,7 +85,7 @@ class _RideRegistrationState extends State<RideRegistration> {
                         child: Container(
                           width: 320,
                           child: const Text(
-                            'We will need to verify your vehicle for authenticity and security purpose.Be sure to upload genuine documents.',
+                            'We will need to verify your vehicle for authenticity and security purpose.Register if you wish to continue.',
                             style: TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
@@ -61,10 +96,11 @@ class _RideRegistrationState extends State<RideRegistration> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
+                            getData();
                             Navigator.of(context).pop();
                           },
                           child: const Text(
-                            'Done',
+                            'Register',
                             style: TextStyle(
                                 fontFamily: 'RobotoCondensed',
                                 fontSize: 18,
@@ -178,18 +214,18 @@ class _RideRegistrationState extends State<RideRegistration> {
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const <Widget>[
-                            Text(
+                          children: <Widget>[
+                            const Text(
                               '  Vehicle',
                               style: TextStyle(
                                   fontFamily: 'RobotoCondensed',
                                   fontSize: 17,
                                   fontWeight: FontWeight.w600),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
-                            VehicleDropDown(),
+                            VehicleDropDown(getVehicleTypeFromChild),
                           ],
                         ),
                         const SizedBox(
@@ -208,11 +244,17 @@ class _RideRegistrationState extends State<RideRegistration> {
                             const SizedBox(
                               height: 10,
                             ),
-                            TextField(
+                            TextFormField(
                                 controller: _vehicleModelController,
                                 textInputAction: TextInputAction.next,
+                                validator: (value) {
+                                  if (value!.isEmpty || value.length < 5) {
+                                    return 'Please specify your vehicle model.';
+                                  }
+                                  return null;
+                                },
                                 maxLines: 1,
-                                onSubmitted: (_) {
+                                onFieldSubmitted: (_) {
                                   FocusScope.of(context)
                                       .requestFocus(_numberplatefocusnode);
                                 },
@@ -222,7 +264,9 @@ class _RideRegistrationState extends State<RideRegistration> {
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(35))),
-                                onChanged: (value) {}),
+                                onSaved: (value) {
+                                  _vehicleModel = value!;
+                                }),
                           ],
                         ),
                         const SizedBox(
@@ -241,7 +285,13 @@ class _RideRegistrationState extends State<RideRegistration> {
                             const SizedBox(
                               height: 10,
                             ),
-                            TextField(
+                            TextFormField(
+                                validator: (value) {
+                                  if (value!.isEmpty || value.length < 10) {
+                                    return 'Please enter valid vehicle number.';
+                                  }
+                                  return null;
+                                },
                                 controller: _registrationNumberController,
                                 focusNode: _numberplatefocusnode,
                                 textInputAction: TextInputAction.done,
@@ -252,7 +302,9 @@ class _RideRegistrationState extends State<RideRegistration> {
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(35))),
-                                onChanged: (value) {}),
+                                onSaved: (value) {
+                                  _vehicleRegistrationNumber = value!;
+                                }),
                           ],
                         ),
                         const SizedBox(
@@ -286,7 +338,13 @@ class _RideRegistrationState extends State<RideRegistration> {
                             const SizedBox(
                               height: 10,
                             ),
-                            TextField(
+                            TextFormField(
+                                validator: (value) {
+                                  if (value!.isEmpty || value.length < 8) {
+                                    return 'Please provide valid license number.';
+                                  }
+                                  return null;
+                                },
                                 controller: _drivingLicenseController,
                                 textInputAction: TextInputAction.done,
                                 maxLines: 1,
@@ -296,7 +354,9 @@ class _RideRegistrationState extends State<RideRegistration> {
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(35))),
-                                onChanged: (value) {}),
+                                onSaved: (value) {
+                                  _licenseNumber = value!;
+                                }),
                             const SizedBox(
                               height: 20,
                             ),

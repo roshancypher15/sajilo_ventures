@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class VehicleDropDown extends StatefulWidget {
-  const VehicleDropDown({Key? key}) : super(key: key);
+  final sendBackValue;
+  const VehicleDropDown(this.sendBackValue, {Key? key}) : super(key: key);
 
   @override
   State<VehicleDropDown> createState() => _VehicleDropDownState();
@@ -42,7 +43,10 @@ class _VehicleDropDownState extends State<VehicleDropDown> {
               hint: const Text('Select an option.'),
               value: itemValue,
               items: vehicles.map(buildMenuItems).toList(),
-              onChanged: (value) => setState(() => itemValue = value as String),
+              onChanged: (value) => setState(() {
+                itemValue = value as String;
+                widget.sendBackValue(itemValue);
+              }),
             ),
           ),
         ),
