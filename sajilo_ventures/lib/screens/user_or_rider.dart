@@ -188,24 +188,27 @@ class _UserOrRiderState extends State<UserOrRider> {
                   ),
                 ],
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 350),
-                width: 300,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: (() {
-                    if (_isRider) {
-                      Navigator.pushNamed(context, LoginSignupAlert.routeName);
-                    }
-                  }),
-                  child: const Text(
-                    'Select',
-                    style: TextStyle(
-                        fontFamily: 'RobotoCondensed',
-                        fontSize: 20,
-                        color: Colors.white),
+              Hero(
+                tag: 'button',
+                child: Container(
+                  margin: const EdgeInsets.only(top: 350),
+                  width: 300,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: (() {
+                      if (_isRider) {
+                        Navigator.pushNamed(context, LoginSignupAlert.routeName);
+                      }
+                    }),
+                    child: const Text(
+                      'Select',
+                      style: TextStyle(
+                          fontFamily: 'RobotoCondensed',
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
                   ),
-                  style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
                 ),
               ),
             ],

@@ -126,6 +126,11 @@ flutter:
     - family:  Verified
       fonts:
         - asset: icons/Verified.ttf
+    - family:  HidePassword
+      fonts:
+        - asset: icons/HidePassword.ttf
+
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

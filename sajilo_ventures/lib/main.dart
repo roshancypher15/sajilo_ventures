@@ -9,6 +9,7 @@ import 'package:sajilo_ventures/screens/ride_registration.dart';
 import 'package:sajilo_ventures/screens/user_or_rider.dart';
 import 'package:sajilo_ventures/screens/login_signup_alert.dart';
 import './screens/auto_complete.dart';
+import './transition/custom_route.dart';
 
 import 'package:sajilo_ventures/screens/trip_summary.dart';
 
@@ -67,6 +68,9 @@ class MyApp extends StatelessWidget {
                       textStyle: Theme.of(context).textTheme.bodyText1,
                       fontWeight: FontWeight.w700,
                       fontSize: 15)),
+          pageTransitionsTheme: PageTransitionsTheme(builders: {
+            TargetPlatform.android: CustomRoute(),
+          }),
           colorScheme: ColorScheme.fromSwatch(
               primarySwatch:
                   buildMaterialColor(const Color.fromRGBO(220, 20, 60, 1))),
