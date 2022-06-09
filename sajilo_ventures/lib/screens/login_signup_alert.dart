@@ -50,8 +50,13 @@ class _LoginSignupAlertState extends State<LoginSignupAlert> {
           setState(() {
             _isloading = false;
           });
-          Navigator.pushNamed(context, RideRegistration.routeName,
-              arguments: authResult.user!.uid);
+          Navigator.pushNamed(context, RideRegistration.routeName, arguments: {
+            'uid': authResult.user!.uid,
+            'email': authResult.user!.email,
+            'phone': _phone,
+            'username': _username,
+            'password': _password.toString()
+          });
         }
       } catch (error) {
         print(error);

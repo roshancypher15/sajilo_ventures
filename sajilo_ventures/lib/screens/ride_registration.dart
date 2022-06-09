@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sajilo_ventures/screens/dashboard.dart';
 
 import '../widgets/vehicle_dropdown.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 import '../widgets/image_input.dart';
 
 class RideRegistration extends StatefulWidget {
@@ -13,6 +16,7 @@ class RideRegistration extends StatefulWidget {
 }
 
 class _RideRegistrationState extends State<RideRegistration> {
+  var _isSigninUp = false;
   final formkey = GlobalKey<FormState>();
   final _vehicleModelController = TextEditingController();
   final _registrationNumberController = TextEditingController();
@@ -22,13 +26,18 @@ class _RideRegistrationState extends State<RideRegistration> {
   var _vehicleRegistrationNumber = '';
   var _licenseNumber = '';
   var _vehicleType = '';
-  late String _userId;
+  late Map<String, dynamic> _userInfo;
+  File? _vehicleRegistationDocumentImage;
+  File? _drivingLicenseFrontImage;
+  File? _drivinglicenseBackImage;
+  File? _vehicleImage;
   final _firestore = FirebaseFirestore.instance;
 
   @override
   void didChangeDependencies() {
-    _userId = ModalRoute.of(context)!.settings.arguments as String;
-    print(_userId);
+    _userInfo =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    print(_userInfo['uid']);
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
@@ -39,79 +48,173 @@ class _RideRegistrationState extends State<RideRegistration> {
     });
   }
 
-  void getData() async {
-    final isvalid = formkey.currentState!.validate();
-    if (isvalid) {
-      formkey.currentState!.save();
+  bool validData() {
+    final isvalid = (formkey.currentState!.validate() &&
+        _vehicleRegistationDocumentImage != null &&
+        _drivingLicenseFrontImage != null &&
+        _drivinglicenseBackImage != null &&
+        _vehicleImage != null);
 
-      await _firestore.collection('allRiders').doc(_userId).set({
-        'vehicleType': _vehicleType,
-        'vehicleModel': _vehicleModel,
-        'vehicleRegistrationNumber': _vehicleRegistrationNumber,
-        'licenseNumber': _licenseNumber
-      });
+    if (isvalid) {
+      return isvalid;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text(
+          'Please, Provide all necessary informations and documents.',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ));
+      return isvalid;
     }
+  }
+
+  void initiateUpload() async {
+    formkey.currentState!.save();
+
+    setState(() {
+      _isSigninUp = true;
+    });
+    final ref1 = FirebaseStorage.instance
+        .ref()
+        .child('user_images')
+        .child(_userInfo['uid'])
+        .child('vehicleRegistationDocumentImage.jpg');
+
+    final ref2 = FirebaseStorage.instance
+        .ref()
+        .child('user_images')
+        .child(_userInfo['uid'])
+        .child('drivingLicenseFront.jpg');
+
+    final ref3 = FirebaseStorage.instance
+        .ref()
+        .child('user_images')
+        .child(_userInfo['uid'])
+        .child('drivinglicenseBackImage.jpg');
+
+    final ref4 = FirebaseStorage.instance
+        .ref()
+        .child('user_images')
+        .child(_userInfo['uid'])
+        .child('vehicleImage.jpg');
+    await ref1.putFile(_vehicleRegistationDocumentImage!);
+    await ref2.putFile(_drivingLicenseFrontImage!);
+    await ref3.putFile(_drivinglicenseBackImage!);
+    await ref4.putFile(_vehicleImage!);
+    final vehicleDocumentURL = await ref1.getDownloadURL();
+    final drivingLicenseFrontURl = await ref2.getDownloadURL();
+    final drivingLicenseBackURL = await ref3.getDownloadURL();
+    final vehiclePhotoURL = await ref4.getDownloadURL();
+
+    await _firestore.collection('allRiders').doc(_userInfo['uid']).set({
+      'email': _userInfo['email'],
+      'password': _userInfo['password'],
+      'username': _userInfo['username'],
+      'phone': _userInfo['phone'],
+      'vehicleType': _vehicleType,
+      'vehicleModel': _vehicleModel,
+      'vehicleRegistrationNumber': _vehicleRegistrationNumber,
+      'licenseNumber': _licenseNumber,
+      'vehicleDocumentURL': vehicleDocumentURL,
+      ' drivingLicenseFrontURl': drivingLicenseFrontURl,
+      'drivingLicenseBackURL': drivingLicenseBackURL,
+      'vehiclePhotoURL': vehiclePhotoURL,
+    });
+    setState(() {
+      _isSigninUp = false;
+    });
+    Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
+  }
+
+  void vehicleRegistrationDocument(File image) {
+    setState(() {
+      _vehicleRegistationDocumentImage = image;
+    });
+  }
+
+  void drivingLicenseFront(File image) {
+    setState(() {
+      _drivingLicenseFrontImage = image;
+    });
+  }
+
+  void drivingLicenseBack(File image) {
+    setState(() {
+      _drivinglicenseBackImage = image;
+    });
+  }
+
+  void vehiclePhoto(File image) {
+    _vehicleImage = image;
   }
 
   Future<void> _submit() async {
     showModalBottomSheet(
+        enableDrag: false,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
         context: context,
         builder: (builder) {
-          return Container(
-              margin: const EdgeInsets.all(15),
-              height: 200.0,
-              width: 300,
-              color: Colors.transparent,
-              child: Container(
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          topRight: Radius.circular(10.0))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      const Text(
-                        'Register Your Vehicle',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: 'RobotoCondensed',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18),
-                      ),
-                      Center(
-                        child: Container(
-                          width: 320,
-                          child: const Text(
-                            'We will need to verify your vehicle for authenticity and security purpose.Register if you wish to continue.',
-                            style: TextStyle(fontSize: 16),
-                            textAlign: TextAlign.center,
+          return StatefulBuilder(builder: (context, setState) {
+            return Container(
+                margin: const EdgeInsets.all(15),
+                height: 200.0,
+                width: 300,
+                color: Colors.transparent,
+                child: Container(
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10.0),
+                            topRight: Radius.circular(10.0))),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        const Text(
+                          'Register Your Vehicle',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'RobotoCondensed',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18),
+                        ),
+                        Center(
+                          child: Container(
+                            width: 320,
+                            child: const Text(
+                              'We will need to verify your vehicle for authenticity and security purpose.Register if you wish to continue.',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        width: 300,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            getData();
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            'Register',
-                            style: TextStyle(
-                                fontFamily: 'RobotoCondensed',
-                                fontSize: 18,
-                                color: Colors.white),
+                        Container(
+                          width: 300,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              initiateUpload();
+                            },
+                            child: _isSigninUp
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    'Register',
+                                    style: TextStyle(
+                                        fontFamily: 'RobotoCondensed',
+                                        fontSize: 18,
+                                        color: Colors.white),
+                                  ),
+                            style: ElevatedButton.styleFrom(
+                                shape: const StadiumBorder()),
                           ),
-                          style: ElevatedButton.styleFrom(
-                              shape: const StadiumBorder()),
                         ),
-                      ),
-                    ],
-                  )));
+                      ],
+                    )));
+          });
         });
   }
 
@@ -257,6 +360,7 @@ class _RideRegistrationState extends State<RideRegistration> {
                                 onFieldSubmitted: (_) {
                                   FocusScope.of(context)
                                       .requestFocus(_numberplatefocusnode);
+                                  
                                 },
                                 decoration: InputDecoration(
                                     hintText: 'eg. Bajaj Pulsar NS 200',
@@ -321,7 +425,8 @@ class _RideRegistrationState extends State<RideRegistration> {
                                 fontWeight: FontWeight.w600),
                           ),
                         ),
-                        const ImageInput(150, 350, 'Upload Document'),
+                        ImageInput(150, 350, 'Upload Document',
+                            vehicleRegistrationDocument),
                         const SizedBox(
                           height: 20,
                         ),
@@ -347,6 +452,9 @@ class _RideRegistrationState extends State<RideRegistration> {
                                 },
                                 controller: _drivingLicenseController,
                                 textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (value) {
+                                  FocusScope.of(context).unfocus();
+                                },
                                 maxLines: 1,
                                 decoration: InputDecoration(
                                     hintText: 'eg. 1234567',
@@ -376,9 +484,11 @@ class _RideRegistrationState extends State<RideRegistration> {
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  children: const <Widget>[
-                                    ImageInput(150, 150, 'Upload Front'),
-                                    ImageInput(150, 150, 'Upload Back'),
+                                  children: <Widget>[
+                                    ImageInput(150, 150, 'Upload Front',
+                                        drivingLicenseFront),
+                                    ImageInput(150, 150, 'Upload Back',
+                                        drivingLicenseBack),
                                   ],
                                 ),
                               ],
@@ -400,7 +510,7 @@ class _RideRegistrationState extends State<RideRegistration> {
                                 fontWeight: FontWeight.w600),
                           ),
                         ),
-                        const ImageInput(150, 350, 'Upload Document'),
+                        ImageInput(150, 350, 'Upload Document', vehiclePhoto),
                         const SizedBox(
                           height: 20,
                         ),
@@ -408,7 +518,12 @@ class _RideRegistrationState extends State<RideRegistration> {
                           width: 300,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: _submit,
+                            onPressed: () {
+                              final confirmValidation = validData();
+                              if (confirmValidation) {
+                                _submit();
+                              }
+                            },
                             child: const Text(
                               'Register',
                               style: TextStyle(
