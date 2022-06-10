@@ -18,13 +18,13 @@ class LoginSignupAlert extends StatefulWidget {
 class _LoginSignupAlertState extends State<LoginSignupAlert>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-
+  final _passwordTextEditor = TextEditingController();
   var _isLogin = true;
   var _isloading = false;
   final _auth = FirebaseAuth.instance;
   var _email = '';
   var _password = '';
-  var _confirmPassword = '';
+
   var _phone = '';
   var _username = '';
   var _hidepassword = true;
@@ -148,7 +148,7 @@ class _LoginSignupAlertState extends State<LoginSignupAlert>
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(top: _isLogin ? 150 : 50, left: 30),
+          margin: EdgeInsets.only(top: _isLogin ? 150 : 50, left: 10),
           child: Card(
             borderOnForeground: true,
             elevation: 6,
@@ -160,7 +160,7 @@ class _LoginSignupAlertState extends State<LoginSignupAlert>
                     width: 1, color: Theme.of(context).colorScheme.secondary),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
+              width: 360,
               constraints: BoxConstraints(minHeight: _isLogin ? 220 : 350),
               curve: Curves.fastOutSlowIn,
               duration: const Duration(milliseconds: 400),
@@ -188,17 +188,16 @@ class _LoginSignupAlertState extends State<LoginSignupAlert>
                       },
                     ),
                     Stack(
-                      alignment: Alignment.bottomRight,
+                      alignment: Alignment.topRight,
                       children: [
                         TextFormField(
                           autofocus: false,
+                          controller: _passwordTextEditor,
                           keyboardType: TextInputType.emailAddress,
                           key: const ValueKey('password'),
                           validator: (value) {
                             if (value!.isEmpty || value.length < 8) {
                               return 'Password must be 8-characters';
-                            } else if (_confirmPassword != value) {
-                              return 'Password doesn\'t match';
                             }
                             {
                               return null;
@@ -227,7 +226,7 @@ class _LoginSignupAlertState extends State<LoginSignupAlert>
                             child: SlideTransition(
                               position: _slideAnimation1,
                               child: Stack(
-                                alignment: Alignment.centerRight,
+                                alignment: Alignment.topRight,
                                 children: [
                                   TextFormField(
                                     autofocus: false,
@@ -237,14 +236,11 @@ class _LoginSignupAlertState extends State<LoginSignupAlert>
                                         labelStyle: TextStyle(fontSize: 16)),
                                     key: const ValueKey('confirmPassword'),
                                     validator: (value) {
-                                      if (_password != value) {
+                                      if (_passwordTextEditor.text != value) {
                                         return 'Password doesn\'t match.';
                                       } else {
                                         return null;
                                       }
-                                    },
-                                    onSaved: (value) {
-                                      _confirmPassword = value!;
                                     },
                                   ),
                                   IconButton(
